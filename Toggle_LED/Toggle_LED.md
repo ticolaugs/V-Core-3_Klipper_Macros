@@ -1,47 +1,18 @@
 # Toggle_LED Macro
 This macro allows you to control a PWM-LED connected to your printer mainboard.
-To add this marco to your printer follow below steps:
-1. Open up ratos.local/ in your browser.
-2. Navigate to the Machine tab.
-3. Open up your Printer.cfg.
-4. Navigate down to the User Overrides.
-5. Add the following code:
-> [output_pin LED]
->
-> pin: PD15       # use the pin connected to your LED
->
-> pwm: True
->
-> hardware_pwm: True
->
-> cycle_time: 0.001
->
-> shutdown_value: 0
->
-> [gcode_macro Toggle_Led]
-> 
-> description: Toggle The LED Bar On/Off, Alternativly Set It To A Specific Intensity
-> 
-> variable_state: 'off'
-> 
-> gcode:
-> 
->     {% if params.S is defined%}
->     
->     {% set S = params.S|default(0.0)|float %}
->     
->     SET_PIN PIN=LED VALUE={S}
->     
->     {%else%}
->     
->        {%if printer['output_pin LED'].value == 0 %}
->        
->           SET_PIN PIN=LED VALUE=1
->           
->        {% else %}
->        
->           SET_PIN PIN=LED VALUE=0
->           
->        {%endif%}
->        
->     {%endif%}
+
+To use this marco to your printer follow below steps:
+1. Install a PWM-LED to a PWM capable pin on your printer mainboard.
+2. Open up ratos.local/ in your browser (Mainsail).
+3. Navigate to the Machine tab.
+4. Open up your Printer.cfg.
+5. Navigate down to the User Overrides.
+6. Add the code from the Toggle_LED.cfg.
+7. Change "PD15" to match your PWM pin, refer to your mainboard pinout document for the correct name/number.
+8. Save+Restart your printer.
+
+After following above steps you should see a "Toggle_LED" be added to the Macros list on the Dashboard of Mainsail.
+When pressed the macro will check the current state of the LED (On/Off) and switch it to the oposite.
+Alternatively you can press the down arrow at the end of the macro to set the brightness of the LED.
+Brightness is a float with a range from 0 to 1.
+To st the LED to 50% brightness for example set it to 0.5.
